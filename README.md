@@ -130,22 +130,6 @@ Allows users to:
 
 ---
 
-📂 Project Structure
-
-src/
- ├── components/
- ├── lib/
- ├── assets/
- ├── App.tsx
- ├── main.tsx
- └── index.css
-
-public/
-README.md
-package.json
-vite.config.ts
----
-
 # 🎯 Future Enhancements
 
 - 🎤 AI Mock Interviews
