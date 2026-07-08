@@ -1,0 +1,6 @@
+{
+  "name": "CareerCompass AI",
+  "description": "Agentic AI Career Operating System for Students providing personalized roadmaps, skill gap analysis, and interactive mentor guides.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global safety net - default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Primitive definition
+    function isValidStudentId(id) {
+      return id is string 
+        && id.size() >= 8 
+        && id.size() <= 64 
+        && id.matches('^student_[a-z0-9]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Match block for the students collection (unified digital twin document)
+    match /students/{studentId} {
+      // Allow single document get only if it's a valid ID pattern
+      allow get: if isValidStudentId(studentId);
+      
+      // Explicitly reject query scraping/listing on the collection
+      allow list: if false;
+
+      // Create validation
+      allow create: if isValidStudentId(studentId)
+        && incoming().profile != null
+        && incoming().profile.id is string
+        && incoming().profile.id.size() >= 8
+        && incoming().profile.id.size() <= 64
+        && incoming().profile.id == studentId
+        && incoming().profile.fullName is string
+        && incoming().profile.fullName.size() >= 2
+        && incoming().profile.fullName.size() <= 100;
+
+      // Update validation - ensures profile identity integrity
+      allow update: if isValidStudentId(studentId)
+        && incoming().profile != null
+        && incoming().profile.id is string
+        && incoming().profile.id.size() >= 8
+        && incoming().profile.id.size() <= 64
+        && incoming().profile.id == studentId
+        && incoming().profile.fullName is string
+        && incoming().profile.fullName.size() >= 2
+        && incoming().profile.fullName.size() <= 100
+        && incoming().profile.id == existing().profile.id;
+
+      // Delete validation - deny deletion entirely
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "entities": {
+    "StudentProfile": {
+      "title": "StudentProfile",
+      "description": "Student's basic profile details and preferences",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "fullName": { "type": "string" },
+        "branch": { "type": "string" },
+        "academicYear": { "type": "string" },
+        "semester": { "type": "string" },
+        "careerGoal": { "type": "string" },
+        "cgpa": { "type": "number" },
+        "skills": { "type": "array" },
+        "languages": { "type": "array" },
+        "frameworks": { "type": "array" },
+        "interests": { "type": "array" },
+        "dailyStudyHours": { "type": "number" },
+        "preferredLearningStyle": { "type": "string" },
+        "githubProfile": { "type": "string" },
+        "linkedinProfile": { "type": "string" },
+        "resumeText": { "type": "string" },
+        "resumeUrl": { "type": "string" },
+        "resumeFileName": { "type": "string" }
+      },
+      "required": ["id", "fullName", "branch", "academicYear", "semester", "careerGoal"]
+    },
+    "CompleteStudentData": {
+      "title": "CompleteStudentData",
+      "description": "Root document containing the student's digital twin parameters and agent cognitive records",
+      "type": "object",
+      "properties": {
+        "profile": { "$ref": "#/entities/StudentProfile" },
+        "roadmap": { "type": "object" },
+        "studyPlan": { "type": "object" },
+        "projectMentor": { "type": "object" },
+        "resumeAnalysis": { "type": "object" },
+        "skillGap": { "type": "object" },
+        "analytics": { "type": "object" },
+        "messages": { "type": "array" }
+      },
+      "required": ["profile"]
+    }
+  },
+  "firestore": {
+    "/students/{studentId}": {
+      "schema": "CompleteStudentData",
+      "description": "The unified digital twin document for each student user"
+    }
+  }
+}
